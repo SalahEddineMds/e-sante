@@ -1,6 +1,11 @@
 
 package e.sante;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 public class SignUp extends javax.swing.JFrame {
 
@@ -299,9 +304,55 @@ public class SignUp extends javax.swing.JFrame {
         String password = new String(jPasswordField1.getPassword());
         String role = jComboBox1.getSelectedItem().toString();
         
-        PatientDAO patientDAO = new PatientDAO();
-        patientDAO.savePatient(nom, prenom, role, nomutilise, password);
+        if (nom.isEmpty() || prenom.isEmpty() || nomutilise.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+        return;
+        }
         
+        try {
+        // Database connection
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/e-sante", "root", "");
+
+        // Check if username already exists
+        String checkUserQuery = "SELECT COUNT(*) FROM user WHERE NomUtilise = ?";
+        PreparedStatement checkUserStmt = conn.prepareStatement(checkUserQuery);
+        checkUserStmt.setString(1, nomutilise);
+
+        ResultSet rs = checkUserStmt.executeQuery();
+        if (rs.next() && rs.getInt(1) > 0) {
+            JOptionPane.showMessageDialog(this, "Nom d'utilisateur déjà pris, veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Insert new user into the database
+        String insertQuery = "INSERT INTO user (Nom, Prenom, NomUtilise, Password, Role) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+        insertStmt.setString(1, nom);
+        insertStmt.setString(2, prenom);
+        insertStmt.setString(3, nomutilise);
+        insertStmt.setString(4, password);
+        insertStmt.setString(5, role);
+
+        int rowsInserted = insertStmt.executeUpdate();
+        if (rowsInserted > 0) {
+            JOptionPane.showMessageDialog(this, "Patient inscrit avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            // Clear fields
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jPasswordField1.setText("");
+            jComboBox1.setSelectedIndex(0);
+        }
+
+        rs.close();
+        checkUserStmt.close();
+        insertStmt.close();
+        conn.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -1,6 +1,6 @@
 
 package e.sante;
-
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
@@ -247,11 +247,27 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        HomePage HomePageFrame = new HomePage();
-        HomePageFrame.setVisible(true);
-        HomePageFrame.pack();
-        HomePageFrame.setLocationRelativeTo(null); //center
+        String username = jTextField1.getText();
+        String password = new String(jPasswordField1.getPassword());
+        
+        PatientDAO patientdao = new PatientDAO();
+        String role = patientdao.validateLogin(username, password);
+        
+        if (role == null) {
+        JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect!", "Erreur", JOptionPane.ERROR_MESSAGE);
+    } else if (role.equals("Patient")) {
+        HomePage patientPage = new HomePage();
+        patientPage.setVisible(true);
+        patientPage.pack();
+        patientPage.setLocationRelativeTo(null);
         this.dispose();
+    } else if (role.equals("Médecin")) {
+        HomePageMed doctorPage = new HomePageMed();
+        doctorPage.setVisible(true);
+        doctorPage.pack();
+        doctorPage.setLocationRelativeTo(null);
+        this.dispose();
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
