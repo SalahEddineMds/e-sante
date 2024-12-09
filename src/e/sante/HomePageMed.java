@@ -9,11 +9,9 @@ package e.sante;
  * @author gggggg
  */
 public class HomePageMed extends javax.swing.JFrame {
-
-    /**
-     * Creates new form HomePageMed
-     */
-    public HomePageMed() {
+    private String doctorid;
+    public HomePageMed(String doctorid) {
+        this.doctorid = doctorid;
         initComponents();
     }
 
@@ -72,7 +70,7 @@ public class HomePageMed extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomePageMed().setVisible(true);
+                new HomePageMed("def").setVisible(true);
             }
         });
     }

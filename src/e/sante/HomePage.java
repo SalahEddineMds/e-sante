@@ -9,11 +9,9 @@ package e.sante;
  * @author DELL
  */
 public class HomePage extends javax.swing.JFrame {
-
-    /**
-     * Creates new form HomePage
-     */
-    public HomePage() {
+    private String patientid;
+    public HomePage(String patientid) {
+        this.patientid = patientid;
         initComponents();
     }
 
@@ -200,7 +198,7 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        SaisieDonnee SaisieDonneeFrame = new SaisieDonnee();
+        SaisieDonnee SaisieDonneeFrame = new SaisieDonnee(patientid);
         SaisieDonneeFrame.setVisible(true);
         SaisieDonneeFrame.pack();
         SaisieDonneeFrame.setLocationRelativeTo(null); //center
@@ -234,10 +232,9 @@ public class HomePage extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomePage().setVisible(true);
+                new HomePage("def").setVisible(true);
             }
         });
     }

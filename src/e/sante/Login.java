@@ -251,18 +251,20 @@ public class Login extends javax.swing.JFrame {
         String password = new String(jPasswordField1.getPassword());
         
         PatientDAO patientdao = new PatientDAO();
-        String role = patientdao.validateLogin(username, password);
+        String[] logindata = patientdao.validateLogin(username, password);
         
-        if (role == null) {
+        if (logindata[0] == null) {
         JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect!", "Erreur", JOptionPane.ERROR_MESSAGE);
-    } else if (role.equals("Patient")) {
-        HomePage patientPage = new HomePage();
+    } else if (logindata[0].equals("Patient")) {
+        String patientid = logindata[1];
+        HomePage patientPage = new HomePage(patientid);
         patientPage.setVisible(true);
         patientPage.pack();
         patientPage.setLocationRelativeTo(null);
         this.dispose();
-    } else if (role.equals("Médecin")) {
-        HomePageMed doctorPage = new HomePageMed();
+    } else if (logindata[0].equals("Médecin")) {
+        String doctorid = logindata[1];
+        HomePageMed doctorPage = new HomePageMed(doctorid);
         doctorPage.setVisible(true);
         doctorPage.pack();
         doctorPage.setLocationRelativeTo(null);
