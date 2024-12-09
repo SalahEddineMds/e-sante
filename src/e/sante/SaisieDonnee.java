@@ -272,6 +272,10 @@ public class SaisieDonnee extends javax.swing.JFrame {
         double tension = Double.parseDouble(jTextField3.getText());
         double taux_glycemie = Double.parseDouble(jTextField4.getText()); 
         
+        if (poids < 30 || poids > 200 || temperature < 35.0 || temperature > 38.5 || tension < 90 || tension > 140 || taux_glycemie < 0.6 || taux_glycemie > 1.3) {
+            AlertDialog.showAlert(this, "Données critique, veuillez contacter votre médecin immédiatement.", "Alerte");
+        }
+        
         PatientDAO patientdao = new PatientDAO();
         patientdao.savePatientData(patient_id, poids, temperature, tension, taux_glycemie);
         javax.swing.JOptionPane.showMessageDialog(this, "Données sauvegardées avec succès !");
