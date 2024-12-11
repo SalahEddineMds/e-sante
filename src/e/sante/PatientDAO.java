@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class PatientDAO {
     public void saveUser(String nom, String prenom, String role, String nomutilise, String password) {
@@ -81,5 +84,20 @@ public class PatientDAO {
     }
     return false;
 }
+    public static List<Patient> getPatientsByDoctorId(String doctorId) {
+    List<Patient> patients = new ArrayList<>();
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(
+             "SELECT Nom, Prenom FROM user WHERE Role = 'Patient'")) {
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            patients.add(new Patient(rs.getString("Nom"), rs.getString("Prenom")));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return patients;
+}
+
 
 }
