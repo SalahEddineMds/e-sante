@@ -98,6 +98,21 @@ public class PatientDAO {
     }
     return patients;
 }
+    public static List<User> getUsersByadminId(String adminId) {
+    List<User> users = new ArrayList<>();
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(
+             "SELECT Nom, Prenom, Role FROM user WHERE Role IN ('Patient', 'Médecin')")) {
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            users.add(new User(rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Role")));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return users;
 
+    
 
+}
 }

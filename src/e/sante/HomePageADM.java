@@ -8,29 +8,32 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 
 
-public class HomePageMed extends javax.swing.JFrame {
-       private String doctorId;
-    public HomePageMed(String doctorId) {
-        this.doctorId = doctorId;
-        initComponents();
-        List<Patient> patients = PatientDAO.getPatientsByDoctorId(doctorId);
+public class HomePageADM extends javax.swing.JFrame {
 
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
-    
-        model.setRowCount(0);
-    
-        for (Patient patient : patients) {
-            model.addRow(new Object[]{patient.getNom(), patient.getPrenom(), ""});
-        }
+    private String adminId;
+    public HomePageADM(String adminId) {
+        this.adminId = adminId;
+        initComponents();
+
         
+        List<User> users = PatientDAO.getUsersByadminId(adminId);
+        
+        DefaultTableModel model = (DefaultTableModel) table2.getModel();
+        model.setRowCount(0);
+        
+        for (User user : users) {
+            model.addRow(new Object[]{user.getNom(), user.getPrenom(), user.getRole() , ""});
+        }
+     
         TableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         ((DefaultTableCellRenderer) centerRenderer).setHorizontalAlignment(JLabel.CENTER);
-
-        table1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        table1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table2.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table2.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table2.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
         
-        table1.getColumnModel().getColumn(2).setCellRenderer(new ButtonRendererEditor());
-        table1.getColumnModel().getColumn(2).setCellEditor(new ButtonRendererEditor());
+        table2.getColumnModel().getColumn(3).setCellRenderer(new ButtonRendererEditorADM());
+        table2.getColumnModel().getColumn(3).setCellEditor(new ButtonRendererEditorADM());
+
     }
 
     @SuppressWarnings("unchecked")
@@ -41,16 +44,16 @@ public class HomePageMed extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table1 = new e.sante.Table();
+        table2 = new e.sante.Table();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setSize(new java.awt.Dimension(800, 500));
+        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(97, 97, 97));
-        jLabel5.setText("SUIVI DES PATIENTS");
+        jLabel5.setText("LISTE DU UTILISATEURS");
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton4.setForeground(new java.awt.Color(57, 181, 74));
@@ -64,23 +67,23 @@ public class HomePageMed extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 204, 0), 3, true));
 
-        table1.setBackground(new java.awt.Color(239, 239, 239));
-        table1.setModel(new javax.swing.table.DefaultTableModel(
+        table2.setBackground(new java.awt.Color(239, 239, 239));
+        table2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nom", "Prenom", "Action"
+                "Nom", "Prenom", "Role", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -91,21 +94,24 @@ public class HomePageMed extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        table1.setFont(new java.awt.Font("Open Sans", 0, 12)); // NOI18N
-        table1.setRowSelectionAllowed(false);
-        table1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(table1);
+        table2.setFont(new java.awt.Font("Open Sans", 0, 12)); // NOI18N
+        table2.setRowSelectionAllowed(false);
+        table2.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(table2);
+        if (table2.getColumnModel().getColumnCount() > 0) {
+            table2.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(285, 285, 285)
+                .addGap(265, 265, 265)
                 .addComponent(jLabel5)
-                .addGap(0, 285, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(50, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -118,7 +124,7 @@ public class HomePageMed extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(16, 16, 16))
         );
@@ -131,15 +137,12 @@ public class HomePageMed extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         Login LoginFrame = new Login();
         LoginFrame.setVisible(true);
@@ -147,12 +150,16 @@ public class HomePageMed extends javax.swing.JFrame {
         LoginFrame.setLocationRelativeTo(null); //center
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
-      
 
-   
-    
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
-        
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -161,20 +168,20 @@ public class HomePageMed extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HomePageMed.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomePageADM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HomePageMed.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomePageADM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HomePageMed.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomePageADM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HomePageMed.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomePageADM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
-        
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomePageMed("doctor123").setVisible(true);
+                new HomePageADM("admin").setVisible(true);
             }
         });
     }
@@ -184,6 +191,6 @@ public class HomePageMed extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private e.sante.Table table1;
+    private e.sante.Table table2;
     // End of variables declaration//GEN-END:variables
 }

@@ -108,6 +108,11 @@ public class HomePage extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Visualisation (Tableau)");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(53, 160, 217));
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -197,6 +202,13 @@ public class HomePage extends javax.swing.JFrame {
         SaisieDonneeFrame.setLocationRelativeTo(null); //center
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        VisualTab VisualTabFrame = new VisualTab(patientid);
+        VisualTabFrame.setVisible(true);
+        VisualTabFrame.pack();
+        VisualTabFrame.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

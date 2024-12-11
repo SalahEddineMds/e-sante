@@ -269,6 +269,13 @@ public class Login extends javax.swing.JFrame {
         doctorPage.pack();
         doctorPage.setLocationRelativeTo(null);
         this.dispose();
+    } else if (logindata[0].equals("admin")) {
+        String adminid = logindata[1];
+        HomePageADM adminPage = new HomePageADM(adminid);
+        adminPage.setVisible(true);
+        adminPage.pack();
+        adminPage.setLocationRelativeTo(null);
+        this.dispose();
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
