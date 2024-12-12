@@ -20,7 +20,7 @@ public class HomePageMed extends javax.swing.JFrame {
         model.setRowCount(0);
     
         for (Patient patient : patients) {
-            model.addRow(new Object[]{patient.getNom(), patient.getPrenom(), ""});
+            model.addRow(new Object[]{String.valueOf(patient.getId()), patient.getNom(), patient.getPrenom(), ""});
         }
         
         TableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -28,9 +28,11 @@ public class HomePageMed extends javax.swing.JFrame {
 
         table1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         table1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table1.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+
         
-        table1.getColumnModel().getColumn(2).setCellRenderer(new ButtonRendererEditor());
-        table1.getColumnModel().getColumn(2).setCellEditor(new ButtonRendererEditor());
+        table1.getColumnModel().getColumn(3).setCellRenderer(new ButtonRendererEditor(table1,doctorId));
+        table1.getColumnModel().getColumn(3).setCellEditor(new ButtonRendererEditor(table1,doctorId));
     }
 
     @SuppressWarnings("unchecked")
@@ -67,20 +69,20 @@ public class HomePageMed extends javax.swing.JFrame {
         table1.setBackground(new java.awt.Color(239, 239, 239));
         table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nom", "Prenom", "Action"
+                "ID", "Nom", "Prenom", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {

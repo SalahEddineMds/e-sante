@@ -12,8 +12,11 @@ public class ButtonRendererEditor extends AbstractCellEditor implements TableCel
     private JPanel panel;
     private JButton tableauButton;
     private JButton graphesButton;
+    private JTable table;
+    private String doctorId;
 
-    public ButtonRendererEditor() {
+    public ButtonRendererEditor(JTable table, String doctorId) {
+        this.doctorId = doctorId;
         panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
         tableauButton = new JButton("Tableau");
         graphesButton = new JButton("Graphes");
@@ -32,9 +35,21 @@ public class ButtonRendererEditor extends AbstractCellEditor implements TableCel
         tableauButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Tableau button clicked!");
-            }
-        });
+                int row = table.getSelectedRow();
+                if (row != -1) {
+                // Get the patientId from the last column (assuming the patient ID is stored in the last column)
+                    String patientId = (String) table.getValueAt(row, 0);  // Adjust the column index if necessary
+            
+                    // Open the VisualTab and pass the patientId
+                    VisualTab visualTabFrame = new VisualTab(patientId,doctorId);
+                    visualTabFrame.setVisible(true);
+                    visualTabFrame.pack();
+                    visualTabFrame.setLocationRelativeTo(null);  // Center the window
+                    JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(tableauButton);
+                    currentFrame.dispose();
+        }
+    }
+});
 
         graphesButton.addActionListener(new ActionListener() {
             @Override

@@ -88,10 +88,10 @@ public class PatientDAO {
     List<Patient> patients = new ArrayList<>();
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(
-             "SELECT Nom, Prenom FROM user WHERE Role = 'Patient'")) {
+             "SELECT ID, Nom, Prenom FROM user WHERE Role = 'Patient'")) {
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            patients.add(new Patient(rs.getString("Nom"), rs.getString("Prenom")));
+            patients.add(new Patient(rs.getInt("ID"), rs.getString("Nom"), rs.getString("Prenom")));
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -112,7 +112,30 @@ public class PatientDAO {
     }
     return users;
 
+    }
     
-
+    public List<DonneesPatient> getPatientDataById(String patientId) {
+    List<DonneesPatient> data = new ArrayList<>();
+    String query = "SELECT date, poids, temperature, tension, taux_glycemie FROM donnee_patient WHERE id_patient = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setString(1, patientId);
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            data.add(new DonneesPatient(
+                rs.getDate("date"),
+                rs.getDouble("poids"),
+                rs.getDouble("temperature"),
+                rs.getDouble("tension"),
+                rs.getDouble("taux_glycemie")
+            ));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return data;
 }
+    
 }
