@@ -29,6 +29,12 @@ public class HomePageMed extends javax.swing.JFrame {
         table1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         table1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         table1.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        
+        //hide id column
+        table1.getColumnModel().getColumn(0).setMaxWidth(0);
+        table1.getColumnModel().getColumn(0).setMinWidth(0);
+        table1.getColumnModel().getColumn(0).setPreferredWidth(0);
+
 
         
         table1.getColumnModel().getColumn(3).setCellRenderer(new ButtonRendererEditor(table1,doctorId));

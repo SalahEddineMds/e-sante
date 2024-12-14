@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.sql.Timestamp;
 
 public class PatientDAO {
     public void saveUser(String nom, String prenom, String role, String nomutilise, String password) {
@@ -102,10 +102,10 @@ public class PatientDAO {
     List<User> users = new ArrayList<>();
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(
-             "SELECT Nom, Prenom, Role FROM user WHERE Role IN ('Patient', 'Médecin')")) {
+             "SELECT ID, Nom, Prenom, Role FROM user WHERE Role IN ('Patient', 'Médecin')")) {
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            users.add(new User(rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Role")));
+            users.add(new User(rs.getInt("ID"), rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Role")));
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -138,4 +138,44 @@ public class PatientDAO {
     return data;
 }
     
+    public static boolean deleteUserById(String userId) {
+    String query = "DELETE FROM user WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+        stmt.setString(1, userId);
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0; // Return true if deletion was successful
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false; // Return false if there was an error
+    }
+    }
+    
+    public static List<DataPoint> getDataByPatientId(String parameter, String userId) {
+    List<DataPoint> dataPoints = new ArrayList<>();
+    try (Connection conn = DatabaseConnection.getConnection()) {
+        // Query to get data for a specific user
+        String query = "SELECT date, " + parameter + " FROM donnee_patient WHERE id_patient = ? ORDER BY date ASC";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, userId); // Set the user ID in the query
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            java.sql.Timestamp timestamp = rs.getTimestamp("date"); // Use Timestamp instead of Date
+            double value = rs.getDouble(parameter);
+            dataPoints.add(new DataPoint(timestamp, value)); // Pass Timestamp to DataPoint
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return dataPoints;
 }
+
+}
+
+
+
+    
+

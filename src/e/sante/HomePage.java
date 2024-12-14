@@ -112,6 +112,11 @@ public class HomePage extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Visualisation (Graphes)");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton4.setForeground(new java.awt.Color(57, 181, 74));
@@ -204,6 +209,14 @@ public class HomePage extends javax.swing.JFrame {
         VisualTabFrame.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        VisualGraphe VisualGrapheFrame = new VisualGraphe(patientid,"");
+        VisualGrapheFrame.setVisible(true);
+        VisualGrapheFrame.pack();
+        VisualGrapheFrame.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

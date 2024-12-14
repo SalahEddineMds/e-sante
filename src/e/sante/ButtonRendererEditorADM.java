@@ -1,87 +1,81 @@
 package e.sante;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Component;
-
 
 public class ButtonRendererEditorADM extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
-    private JPanel panel;
-    private JButton modifButton;
-    private JButton suppButton;
+    private final JPanel panel;
+    private final JButton suppButton;
+    private final JTable table;
+    private final String adminId;
 
-    public ButtonRendererEditorADM() {
+    public ButtonRendererEditorADM(String adminId, JTable table) {
+        this.adminId = adminId;
+        this.table = table;
+
+        // Initialize panel and button
         panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-        modifButton = new JButton("Modifier");
-        suppButton = new JButton("X");
-        
-        modifButton.setMargin(new Insets(5, 5, 5, 5)); 
-        suppButton.setMargin(new Insets(5, 5, 5, 5)); 
+        suppButton = new JButton("Supprimer");
 
-        modifButton.setBackground(Color.GREEN);
-        modifButton.setForeground(Color.WHITE);
+        // Button styles
+        suppButton.setMargin(new Insets(5, 5, 5, 5));
         suppButton.setBackground(Color.RED);
         suppButton.setForeground(Color.WHITE);
-
-        modifButton.setFocusPainted(false);
         suppButton.setFocusPainted(false);
 
-        modifButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Modifier button clicked!");
-            }
-        });
-
+        // Add button action listener
         suppButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Supprimer button clicked!");
+                int row = table.getEditingRow(); // Get the row being edited
+                if (row >= 0) {
+                    int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "Voulez-vous vraiment supprimer cet utilisateur?",
+                        "Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        // Retrieve the user ID from the first column
+                        String userId = (String) table.getValueAt(row, 0);
+
+                        // Call the DAO to delete the user
+                        boolean success = PatientDAO.deleteUserById(userId);
+
+                        if (success) {
+                            // Remove the row from the table
+                            ((DefaultTableModel) table.getModel()).removeRow(row);
+                            JOptionPane.showMessageDialog(null, "Utilisateur supprimé avec succès.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Erreur lors de la suppression de l'utilisateur.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
             }
         });
 
-        panel.add(modifButton);
+        // Add button to panel
         panel.add(suppButton);
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        return getButtonComponent(table, row);
+        return panel;
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        
-        return getButtonComponent(table, row);
-    }
-    
-    private Component getButtonComponent(JTable table, int row) {
-        String nom = (String) table.getValueAt(row, 0);  
-        String prenom = (String) table.getValueAt(row, 1); 
-
-        if (nom == null || nom.isEmpty() || prenom == null || prenom.isEmpty()) {
-            modifButton.setBackground(Color.GRAY);
-            suppButton.setBackground(Color.GRAY);
-            modifButton.setEnabled(false);  // Disable the button
-            suppButton.setEnabled(false);  // Disable the button
-        } else {
-            modifButton.setBackground(Color.GREEN);
-            suppButton.setBackground(Color.RED);
-            modifButton.setEnabled(true);  // Disable the button
-            suppButton.setEnabled(true);  // Disable the button
-        }
-
         return panel;
     }
-    
+
     @Override
     public Object getCellEditorValue() {
         return null;
     }
-    
-   }
+}

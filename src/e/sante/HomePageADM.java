@@ -22,7 +22,7 @@ public class HomePageADM extends javax.swing.JFrame {
         model.setRowCount(0);
         
         for (User user : users) {
-            model.addRow(new Object[]{user.getNom(), user.getPrenom(), user.getRole() , ""});
+            model.addRow(new Object[]{String.valueOf(user.getId()), user.getNom(), user.getPrenom(), user.getRole() , ""});
         }
      
         TableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -30,9 +30,14 @@ public class HomePageADM extends javax.swing.JFrame {
         table2.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         table2.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         table2.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        table2.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+
+        table2.getColumnModel().getColumn(0).setMaxWidth(0);
+        table2.getColumnModel().getColumn(0).setMinWidth(0);
+        table2.getColumnModel().getColumn(0).setPreferredWidth(0);
         
-        table2.getColumnModel().getColumn(3).setCellRenderer(new ButtonRendererEditorADM());
-        table2.getColumnModel().getColumn(3).setCellEditor(new ButtonRendererEditorADM());
+        table2.getColumnModel().getColumn(4).setCellRenderer(new ButtonRendererEditorADM(adminId, table2));
+        table2.getColumnModel().getColumn(4).setCellEditor(new ButtonRendererEditorADM(adminId, table2));
 
     }
 
@@ -47,7 +52,6 @@ public class HomePageADM extends javax.swing.JFrame {
         table2 = new e.sante.Table();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
 
@@ -70,20 +74,20 @@ public class HomePageADM extends javax.swing.JFrame {
         table2.setBackground(new java.awt.Color(239, 239, 239));
         table2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nom", "Prenom", "Role", "Action"
+                "ID", "Nom", "Prenom", "Role", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -100,6 +104,7 @@ public class HomePageADM extends javax.swing.JFrame {
         jScrollPane1.setViewportView(table2);
         if (table2.getColumnModel().getColumnCount() > 0) {
             table2.getColumnModel().getColumn(0).setResizable(false);
+            table2.getColumnModel().getColumn(1).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

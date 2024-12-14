@@ -54,9 +54,21 @@ public class ButtonRendererEditor extends AbstractCellEditor implements TableCel
         graphesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Graphes button clicked!");
-            }
-        });
+                int row = table.getSelectedRow();
+                if (row != -1) {
+                // Get the patientId from the last column (assuming the patient ID is stored in the last column)
+                    String patientId = (String) table.getValueAt(row, 0);  // Adjust the column index if necessary
+            
+                    // Open the VisualTab and pass the patientId
+                    VisualGraphe visualGrapheFrame = new VisualGraphe(patientId,doctorId);
+                    visualGrapheFrame.setVisible(true);
+                    visualGrapheFrame.pack();
+                    visualGrapheFrame.setLocationRelativeTo(null);  // Center the window
+                    JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(tableauButton);
+                    currentFrame.dispose();
+        }
+    }
+});
 
         panel.add(tableauButton);
         panel.add(graphesButton);
